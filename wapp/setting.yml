@@ -1,0 +1,164 @@
+global:
+  root: ''
+  data:
+    empty_page: ''
+    navigate_sleep_time: 5
+#
+#    login_data:
+#      url: ''
+#      username: ''
+#      password: ''
+#      login_script: 'js/login.js'
+#      login_waiting_sec: ''
+
+login:
+  name: 'login'
+  driver:
+    default_url: 'https://weibo.com/'
+    sleep_time: 5
+  run:
+    type: 'loop'
+    times: 3
+  task:
+    -
+      opr: 'sleep'
+      time: 5
+    -
+      name: '123'
+      opr: 'js_script'
+      script: 'console.log("run once");'
+      run:
+        times: 1
+    -
+      name: 'js_script'
+      opr: 'js_script'
+      script: 'console.log("run")'
+    -
+      opr: 'sleep'
+      time: 5
+    -
+      opr: 'js_script'
+      src: 'js/login.js'
+    -
+      opr: 'sleep'
+      time: 5
+
+pre:
+  name: 'process task options'
+  driver:
+    default_url: 'https://www.youku.com'
+  task:
+#    -
+#      opr: 'login'
+    -
+      opr: 'navigate_to'
+#      url: '=data[empty_page]'
+      url: 'https://www.qq.com'
+      times: 1
+    -
+      opr: 'js_script'
+      src: 'js/pre.js'
+    -
+      opr: 'py_script'
+      src: 'py.process_task_options'
+    -
+      opr: 'click'
+      target_selector: '[bosszone=dh_3]'
+
+
+#task:
+#  -
+#    name: 'outer'
+#    type: 'parallel'
+#    driver: 'outer_driver'
+#    task:
+#      -
+#        name: '111'
+#        type: 'circle'
+#        driver:
+#          default_url: ''
+#        task:
+#          -
+#            opr: 'navigate_to'
+#            target_url: '=data[empty_page]'
+#          -
+#            opr: 'sleep'
+#            time: '=data[navigate_sleep_time]'
+#          -
+#            opr: 'navigate_to'
+#            target_url: '=data[url][#self]'
+#          -
+#            opr: 'sleep'
+#            time: '=data[navigate_sleep_time]'
+#
+#      -
+#        name: '222'
+#        type: 'circle'
+#        task:
+#          -
+#            opr: 'navigate_to'
+#            target_url: '=data[empty_page]'
+#          -
+#            opr: 'sleep'
+#            time: '=data[navigate_sleep_time]'
+
+#task:
+#  -
+#    name: 'root'
+#    run:
+#      type: 'parallel'
+#    task:
+#      -
+#        driver:
+#          default_url: 'https://www.baidu.com#default'
+#        opr: 'navigate_to'
+#        url: 'https://www.baidu.com'
+#      -
+#        driver:
+#          default_url: 'https://www.baidu.com#default'
+#        opr: 'navigate_to'
+#        url: 'https://www.youku.com'
+
+task:
+  -
+    name: 'root_task'
+    run:
+      type: 'parallel'
+    task:
+      -
+        name: 'page_1'
+        driver: True
+        run:
+          type: 'loop'
+          times: 3
+        task:
+          -
+            opr: 'navigate_to'
+            url: 'https://www.baidu.com'
+          -
+            opr: 'sleep'
+            time: 5
+          -
+            opr: 'navigate_to'
+            url: 'https://www.qq.com'
+          -
+            opr: 'sleep'
+            time: 5
+      -
+        name: 'page_2'
+        driver: True
+        task:
+          -
+            opr: 'navigate_to'
+            url: 'https://www.youku.com'
+          -
+            opr: 'sleep'
+            time: 3
+          -
+            opr: 'navigate_to'
+            url: 'https://www.bilibili.com'
+          -
+            opr: 'sleep'
+            time: 3
+
+
