@@ -119,46 +119,67 @@ pre:
 #        opr: 'navigate_to'
 #        url: 'https://www.youku.com'
 
+#task:
+#  -
+#    name: 'root_task'
+#    run:
+#      type: 'parallel'
+#    task:
+#      -
+#        name: 'page_1'
+#        driver: True
+#        run:
+#          type: 'loop'
+#          times: 3
+#        task:
+#          -
+#            opr: 'navigate_to'
+#            url: 'https://www.baidu.com'
+#          -
+#            opr: 'sleep'
+#            time: 5
+#          -
+#            opr: 'navigate_to'
+#            url: 'https://www.qq.com'
+#          -
+#            opr: 'sleep'
+#            time: 5
+#      -
+#        name: 'page_2'
+#        driver: True
+#        task:
+#          -
+#            opr: 'navigate_to'
+#            url: 'https://www.youku.com'
+#          -
+#            opr: 'sleep'
+#            time: 3
+#          -
+#            opr: 'navigate_to'
+#            url: 'https://www.bilibili.com'
+#          -
+#            opr: 'sleep'
+#            time: 3
+
 task:
   -
-    name: 'root_task'
-    run:
-      type: 'parallel'
+    name: 'simple_parallel'
+    logger:
+      debug: True
+#    run:
+#      type: 'parallel'
     task:
       -
-        name: 'page_1'
-        driver: True
-        run:
-          type: 'loop'
-          times: 3
-        task:
-          -
-            opr: 'navigate_to'
-            url: 'https://www.baidu.com'
-          -
-            opr: 'sleep'
-            time: 5
-          -
-            opr: 'navigate_to'
-            url: 'https://www.qq.com'
-          -
-            opr: 'sleep'
-            time: 5
+        name: 'task_1'
+        opr: 'sleep'
+        time: 1
       -
-        name: 'page_2'
-        driver: True
+        name: 'task_2'
+        opr: 'sleep'
+        time: 5
         task:
           -
-            opr: 'navigate_to'
-            url: 'https://www.youku.com'
-          -
+            name: 'task_2-1'
             opr: 'sleep'
-            time: 3
-          -
-            opr: 'navigate_to'
-            url: 'https://www.bilibili.com'
-          -
-            opr: 'sleep'
-            time: 3
-
+            time: 1
 

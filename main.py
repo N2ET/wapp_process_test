@@ -1,7 +1,7 @@
 import yaml
 import os
 from task import Task
-
+from logger import EventLogger
 
 def load_config(config_path):
     file = open(config_path, 'r', encoding='utf-8')
@@ -35,7 +35,6 @@ setting['global']['root'] = os.path.join(
 #     setting.get('task')[0],
 #     setting.get('global')
 # )
-
 
 t = Task(
     setting.get('task')[0],

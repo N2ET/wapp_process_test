@@ -2,6 +2,7 @@ import os
 import threading
 import handlers
 import driver
+import logger
 
 RUN_TYPE = {
     'LOOP': 'loop',
@@ -55,6 +56,15 @@ class Task(object):
         if not isinstance(self._driver, driver.Driver):
             self._init_driver()
 
+        self._logger = self._config.get('logger', logger.empty_event_logger)
+        if self._logger and not isinstance(self._logger, logger.Logger):
+            if not isinstance(self._logger, dict):
+                self._logger = {}
+            self._logger = logger.EventLogger({
+                'name': self._logger.get('name', self._name),
+                'debug': self._logger.get('debug', False)
+            })
+
         self._task = []
         self._init_task()
 
@@ -76,6 +86,9 @@ class Task(object):
 
             if not task_config.get('driver'):
                 task_config['driver'] = self._driver
+
+            if not task_config.get('logger'):
+                task_config['logger'] = self._logger
 
             self._task.append(
                 Task(task_config, self._data)
@@ -117,7 +130,8 @@ class Task(object):
         for task in self._task:
             def get_task_fn(task):
                 def task_fn():
-                    print('threading %s' % threading.current_thread().ident)
+                    # print('threading %s' % threading.current_thread().ident)
+                    self._logger.debug('thread id: %s' % threading.current_thread().ident)
                     task.run()
                 return task_fn
             t = threading.Thread(target=get_task_fn(task))
@@ -125,20 +139,36 @@ class Task(object):
 
         self._run_times += 1
 
+    def log_event(self, event, msg):
+        self._logger.log_event({
+            'name': self._name,
+            'event': event,
+            'msg': msg
+        })
+
     def run_opr(self):
         opr = self._config.get('opr', None)
-        print('[%s] [%s] [%s]' % (self._name, self._driver, opr))
+        # print('[%s] [%s] [%s]' % (self._name, self._driver, opr))
 
         if not opr:
             return
 
+        self._logger.debug('[%s] [%s] [%s]' % (self._name, self._driver, opr))
+
         if opr == 'py_script':
+            self.log_event('pyscript', 'run %s' % self._config.get('src'))
             return self.run_py_script()
 
         if opr == 'js_script':
+            self.log_event('pyscript', 'run %s' % self._config.get('src'))
             return self.run_js_script()
 
+        msg = ''
         fn = getattr(handlers, opr, handlers.empty_opr)
+        formatter = getattr(handlers, opr + '_formatter', None)
+        if formatter:
+            msg = formatter(self)
+        self.log_event(opr, msg)
         fn(self)
 
     def run_py_script(self):
@@ -167,6 +197,9 @@ class Task(object):
 
     def get_name(self):
         return self._name
+
+    def get_logger(self):
+        return self._logger
 
     def _get_file_path(self, file):
         return os.path.join(

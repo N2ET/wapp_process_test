@@ -9,6 +9,11 @@ def navigate_to(task):
     )
 
 
+def navigate_to_formatter(task):
+    config = task.get_config()
+    return 'navigate to %s ' % config.get('url')
+
+
 def sleep(task):
     sec = float(task.get_config().get('time'))
     if sec <= 0:
@@ -17,9 +22,9 @@ def sleep(task):
     time.sleep(sec)
 
 
-def empty_opr(task):
+def sleep_formatter(task):
     config = task.get_config()
-    print('no such handler %s' % config.get('opr'))
+    return 'sleep %s' % config.get('time')
 
 
 def click(task):
@@ -29,3 +34,13 @@ def click(task):
         config.get('target_selector')
     )
     dom.click()
+
+
+def click_formatter(task):
+    config = task.get_config()
+    return 'click %s' % config.get('target_selector')
+
+
+def empty_opr(task):
+    config = task.get_config()
+    print('no such handler %s' % config.get('opr'))
