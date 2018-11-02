@@ -161,25 +161,48 @@ pre:
 #            opr: 'sleep'
 #            time: 3
 
+#task:
+#  -
+#    name: 'simple_parallel'
+#    logger:
+#      debug: True
+##    run:
+##      type: 'parallel'
+#    task:
+#      -
+#        name: 'task_1'
+#        opr: 'sleep'
+#        time: 1
+#      -
+#        name: 'task_2'
+#        opr: 'sleep'
+#        time: 5
+#        task:
+#          -
+#            name: 'task_2-1'
+#            opr: 'sleep'
+#            time: 1
+
 task:
   -
-    name: 'simple_parallel'
+    name: 'root'
+    run:
+      type: 'parallel'
     logger:
       debug: True
-#    run:
-#      type: 'parallel'
+    process_logger:
+      debug: True
+      interval: 1
+      pre_interval: 5
+      end_interval: 5
     task:
       -
-        name: 'task_1'
-        opr: 'sleep'
-        time: 1
+        driver:
+          default_url: 'https://www.baidu.com#default'
+        opr: 'navigate_to'
+        url: 'https://www.baidu.com'
       -
-        name: 'task_2'
-        opr: 'sleep'
-        time: 5
-        task:
-          -
-            name: 'task_2-1'
-            opr: 'sleep'
-            time: 1
-
+        driver:
+          default_url: 'https://www.baidu.com#default'
+        opr: 'navigate_to'
+        url: 'https://www.youku.com'
