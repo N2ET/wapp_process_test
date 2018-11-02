@@ -80,6 +80,7 @@ class ProcessLogger(Logger):
         if isinstance(pre_interval, (int, float)):
             self.log('wait %s sec(s) to start' % pre_interval)
             self.start(pre_interval)
+        self.start()
 
     def pause(self):
         self._timer.cancel()
@@ -92,17 +93,22 @@ class ProcessLogger(Logger):
         if not isinstance(delay_time, (int, float)):
             self.pause()
         else:
-            self._timer = threading.Timer(
+            timer = threading.Timer(
                 delay_time,
                 self.pause
             )
-            self._timer.start()
+            timer.start()
+            return timer
 
     def delay_stop(self):
         end_interval = self._config['end_interval']
         if isinstance(end_interval, (int, float)):
             self.log('wait %s sec(s) to stop' % end_interval)
-            self.stop(end_interval)
+            timer = self.stop(end_interval)
+            if timer:
+                timer.join()
+
+        self.stop()
 
     def _get_platform_info(self):
         return {
@@ -120,7 +126,11 @@ class ProcessLogger(Logger):
         data = {}
 
         if not os.path.exists(output_dir):
-            os.makedirs(output_dir)
+            try:
+                os.makedirs(output_dir)
+            except Exception as e:
+                self.error(e)
+                return
 
         if os.path.exists(json_filename):
             data = self._load_json(json_filename)
@@ -172,7 +182,8 @@ class ProcessLogger(Logger):
     def remove(self, process):
         pass
 
-
+    def get_config(self):
+        return self._config
 
 
 

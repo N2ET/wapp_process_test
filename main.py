@@ -1,7 +1,7 @@
 import yaml
 import os
 from task import Task
-from logger import EventLogger
+import time
 
 def load_config(config_path):
     file = open(config_path, 'r', encoding='utf-8')
@@ -36,6 +36,10 @@ setting['global']['root'] = os.path.join(
 #     setting.get('global')
 # )
 
+process_logger_config = setting.get('task')[0].get('process_logger')
+if process_logger_config and not process_logger_config.get('output_dir'):
+    process_logger_config['output_dir'] = os.path.join(dir, 'test')
+
 t = Task(
     setting.get('task')[0],
     setting.get('global')
@@ -43,6 +47,17 @@ t = Task(
 
 print(t)
 
+t.get_process_logger().start()
+
 t.run()
 
-print(t)
+t.get_process_logger().delay_stop()
+t.get_process_logger().save()
+
+print(
+    'main end :' +
+    time.strftime(
+        '%Y-%m-%d %H:%M:%S',
+        time.localtime(time.time())
+    )
+)

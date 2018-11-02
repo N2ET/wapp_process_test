@@ -1,5 +1,6 @@
 import time
 from selenium import webdriver
+import pid_finder
 
 
 class Driver(object):
@@ -9,6 +10,7 @@ class Driver(object):
 
         self._config = config
         self._driver = None
+        self._pid = None
 
     # def __del__(self):
     #     if self._driver:
@@ -16,7 +18,6 @@ class Driver(object):
 
     def init(self):
         self._init_driver()
-        self._get_pid()
 
     def _init_driver(self):
         print('init driver')
@@ -28,8 +29,13 @@ class Driver(object):
             if sleep_time > 0:
                 time.sleep(sleep_time)
 
-    def _get_pid(self):
-        print('get pid')
+    def get_pid(self):
+        url = self._config['default_url']
+        self._pid = pid_finder.get_pid(self._driver, {
+            'url': url,
+            'name': url
+        })
+        return self._pid
 
     def execute(self):
         pass

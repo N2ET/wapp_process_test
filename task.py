@@ -3,6 +3,7 @@ import threading
 import handlers
 import driver
 import logger
+import process_logger
 
 RUN_TYPE = {
     'LOOP': 'loop',
@@ -47,14 +48,15 @@ class Task(object):
 
         self._run_times = 0
 
+        self._threads = []
+
         self._driver = task_config.get('driver', None)
 
         self._name = task_config.get('name', '')
         if not self._name:
             self._name = task_config.get('opr', '')
 
-        if not isinstance(self._driver, driver.Driver):
-            self._init_driver()
+        self._init_process_logger()
 
         self._logger = self._config.get('logger', logger.empty_event_logger)
         if self._logger and not isinstance(self._logger, logger.Logger):
@@ -64,6 +66,9 @@ class Task(object):
                 'name': self._logger.get('name', self._name),
                 'debug': self._logger.get('debug', False)
             })
+
+        if not isinstance(self._driver, driver.Driver):
+            self._init_driver()
 
         self._task = []
         self._init_task()
@@ -80,6 +85,32 @@ class Task(object):
             self._driver
         )
         self._driver.init()
+        self._on_driver_init()
+
+    def _on_driver_init(self):
+
+        if self._process_logger and \
+                self._process_logger.get_config()\
+                        .get('log_driver') is not False:
+            pid = self._driver.get_pid()
+            self._logger.debug('get page pid: %s' % pid)
+            if not isinstance(pid, int):
+                return
+            self._process_logger.add({
+                'name': self._name,
+                'pid': pid
+            })
+
+    def _init_process_logger(self):
+        config = self._config.get('process_logger')
+        if not config:
+            return
+
+        if isinstance(config, process_logger.ProcessLogger):
+            self._process_logger = config
+            return
+
+        self._process_logger = process_logger.ProcessLogger(config)
 
     def _init_task(self):
         for task_config in self._config.get('task', []):
@@ -89,6 +120,9 @@ class Task(object):
 
             if not task_config.get('logger'):
                 task_config['logger'] = self._logger
+
+            if not task_config.get('process_logger'):
+                task_config['process_logger'] = self._process_logger
 
             self._task.append(
                 Task(task_config, self._data)
@@ -135,9 +169,22 @@ class Task(object):
                     task.run()
                 return task_fn
             t = threading.Thread(target=get_task_fn(task))
+            self._threads.append(t)
             t.start()
 
         self._run_times += 1
+        for t in self._threads:
+            t.join()
+        self._on_parallel_task_end()
+
+    def _on_parallel_task_end(self):
+        # task_end_fn = self._config.get('task_end_fn')
+        # if not task_end_fn:
+        #     return
+
+        self._logger.log('parallel task end')
+        # task_end_fn()
+        self._threads = []
 
     def log_event(self, event, msg):
         self._logger.log_event({
@@ -200,6 +247,9 @@ class Task(object):
 
     def get_logger(self):
         return self._logger
+
+    def get_process_logger(self):
+        return self._process_logger
 
     def _get_file_path(self, file):
         return os.path.join(

@@ -193,16 +193,36 @@ task:
     process_logger:
       debug: True
       interval: 1
-      pre_interval: 5
-      end_interval: 5
+##      pre_interval: 5
+      end_interval: 10
+#      log_driver: True
     task:
       -
+        name: 'task-1'
         driver:
-          default_url: 'https://www.baidu.com#default'
+          #default_url: 'https://www.baidu.com#default'
+          default_url: 'http://200.200.151.26#default'
         opr: 'navigate_to'
-        url: 'https://www.baidu.com'
+#        url: 'https://www.baidu.com'
+        url: 'http://200.200.151.26'
+        task:
+          -
+            name: 'sleep-10'
+            opr: 'sleep'
+            time: 10
+#      -
+#        opr: 'sleep'
+#        time: 10
       -
+        name: 'task-2'
         driver:
-          default_url: 'https://www.baidu.com#default'
+#          default_url: 'https://www.baidu.com#default'
+          default_url: 'http://200.200.151.26#default'
         opr: 'navigate_to'
-        url: 'https://www.youku.com'
+#        url: 'https://www.youku.com'
+        url: 'http://200.200.151.26'
+        task:
+          -
+            name: 'sleep-5'
+            opr: 'sleep'
+            time: '5'
