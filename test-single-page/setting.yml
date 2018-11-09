@@ -20,7 +20,7 @@ global:
         src: 'js/login.js'
 
   task_config: &TASK_CONFIG
-    name: '' # use target page name
+    name: '__task_name__' # use target page name
     run:
       times: 10
     driver: &DRIVER
@@ -39,7 +39,7 @@ global:
         time: 5
       -
         opr: 'navigate_to'
-        url: '' # target page url
+        url: '__task_url__' # target page url
       -
         opr: 'sleep'
         time: 5
