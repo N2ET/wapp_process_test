@@ -69,17 +69,23 @@ def main(args):
     if not setting.get('task'):
         return
 
+    process_logger_config = setting.get('task')[0].get('process_logger')
+    if process_logger_config and not process_logger_config.get('output_dir'):
+        process_logger_config['output_dir'] = os.path.join(setting_root, 'process_logger')
+
     t = Task(
-        setting('task')[0],
+        setting['task'][0],
         setting.get('global')
     )
+
     process_logger = t.get_process_logger()
-    process_logger.start()
+    if process_logger:
+        process_logger.start()
     t.run()
-    process_logger.delay_stop()
-    process_logger.save()
+    if process_logger:
+        process_logger.delay_stop()
+        process_logger.save()
 
 
-# python main.py -f ./wapp/setting-1.yml
 if __name__ == '__main__':
     main(sys.argv[1:])
