@@ -104,6 +104,7 @@ class Task(object):
     def _init_process_logger(self):
         config = self._config.get('process_logger')
         if not config:
+            self._process_logger = None
             return
 
         if isinstance(config, process_logger.ProcessLogger):

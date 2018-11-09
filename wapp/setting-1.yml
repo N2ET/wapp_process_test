@@ -1,0 +1,26 @@
+global:
+  root: ''
+
+pre:
+  name: 'process task options'
+  driver:
+    default_url: 'https://www.youku.com'
+  logger:
+    debug: True
+  task:
+    -
+      opr: 'sleep'
+      time: 5
+    -
+      opr: 'navigate_to'
+      url: 'https://www.qq.com'
+      times: 1
+    -
+      opr: 'js_script'
+      src: 'js/pre.js'
+    -
+      opr: 'py_script'
+      src: 'py.process_task_options'
+    -
+      opr: 'click'
+      target_selector: '[bosszone=dh_3]'

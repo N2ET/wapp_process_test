@@ -30,10 +30,13 @@ def sleep_formatter(task):
 def click(task):
     driver = task.get_driver().get_driver()
     config = task.get_config()
-    dom = driver.find_element_by_css_selector(
-        config.get('target_selector')
-    )
-    dom.click()
+    try:
+        dom = driver.find_element_by_css_selector(
+            config.get('target_selector')
+        )
+        dom.click()
+    except Exception as e:
+        task.get_logger().error('opr click error, %s' % e)
 
 
 def click_formatter(task):
