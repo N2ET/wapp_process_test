@@ -225,8 +225,9 @@ class Task(object):
         if hasattr(module, 'run'):
             module.run(self, self._data)
 
-    def run_js_script(self):
-        script = self._config.get('script')
+    def run_js_script(self, script=None):
+        if not script:
+            script = self._config.get('script')
         if not script:
             file = open(
                 self._get_file_path(self._config.get('src')),
@@ -235,7 +236,7 @@ class Task(object):
             )
             script = file.read()
             file.close()
-        self._driver.get_driver().execute_script(script)
+        return self._driver.get_driver().execute_script(script)
 
     def get_config(self):
         return self._config

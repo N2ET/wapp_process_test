@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7a1b0a75-bc30-441f-9f50-d5bf25aea346" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/driver.py" beforeDir="false" afterPath="$PROJECT_DIR$/driver.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/task.py" beforeDir="false" afterPath="$PROJECT_DIR$/task.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -60,43 +61,69 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="10602" />
+          <entry key="py" value="10784" />
           <entry key="yml" value="891" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="10602" />
+          <entry key="Python" value="10784" />
           <entry key="YAML" value="891" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="js" value="1" />
-          <entry key="py" value="23" />
-          <entry key="yml" value="3" />
+          <entry key="js" value="2" />
+          <entry key="py" value="26" />
+          <entry key="yml" value="5" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="JavaScript" value="1" />
-          <entry key="Python" value="23" />
-          <entry key="YAML" value="3" />
+          <entry key="JavaScript" value="2" />
+          <entry key="Python" value="26" />
+          <entry key="YAML" value="5" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.5676856">
+    <splitter split-orientation="horizontal" split-proportion="0.4029944">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="true">
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/main.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="105">
-                  <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
+                <state relative-caret-position="567">
+                  <caret line="27" column="36" selection-start-line="27" selection-start-column="36" selection-end-line="27" selection-end-column="36" />
                   <folding>
                     <element signature="e#0#11#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/driver.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="571">
+                  <caret line="39" column="22" lean-forward="true" selection-start-line="39" selection-start-column="22" selection-end-line="39" selection-end-column="22" />
+                  <folding>
+                    <element signature="e#0#11#0" expanded="true" />
+                    <marker date="1541756476714" expanded="true" signature="84:89" ph="..." />
+                    <marker date="1541756476714" expanded="true" signature="997:1016" ph="..." />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/test-single-page/py/process_task_setting.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="42">
+                  <caret line="2" column="17" lean-forward="true" selection-start-line="2" selection-start-column="17" selection-end-line="2" selection-end-column="17" />
+                  <folding>
+                    <marker date="1541756674231" expanded="true" signature="20:25" ph="..." />
                   </folding>
                 </state>
               </provider>
@@ -106,7 +133,7 @@
             <entry file="file://$PROJECT_DIR$/wapp/setting-login.yml">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="798">
-                  <caret line="38" column="20" lean-forward="true" selection-start-line="38" selection-start-column="20" selection-end-line="38" selection-end-column="20" />
+                  <caret line="38" column="20" selection-start-line="38" selection-start-column="20" selection-end-line="38" selection-end-column="20" />
                 </state>
               </provider>
             </entry>
@@ -127,15 +154,24 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/task.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="269">
-                  <caret line="108" lean-forward="true" selection-start-line="108" selection-end-line="108" />
+                <state relative-caret-position="215">
+                  <caret line="225" column="34" selection-start-line="225" selection-start-column="34" selection-end-line="225" selection-end-column="34" />
                   <folding>
                     <element signature="e#0#9#0" expanded="true" />
-                    <marker date="1541748810876" expanded="true" signature="233:321" ph="..." />
-                    <marker date="1541748810876" expanded="true" signature="340:341" ph="..." />
-                    <marker date="1541748810876" expanded="true" signature="384:3541" ph="..." />
-                    <marker date="1541748810876" expanded="true" signature="7032:7038" ph="..." />
+                    <marker date="1541756570078" expanded="true" signature="233:321" ph="..." />
+                    <marker date="1541756570078" expanded="true" signature="340:341" ph="..." />
+                    <marker date="1541756570078" expanded="true" signature="384:3541" ph="..." />
+                    <marker date="1541756570078" expanded="true" signature="7079:7085" ph="..." />
                   </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/test-single-page/js/get_pages.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="651">
+                  <caret line="31" column="13" selection-start-line="31" selection-start-column="13" selection-end-line="31" selection-end-column="13" />
                 </state>
               </provider>
             </entry>
@@ -152,11 +188,11 @@
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="true">
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/wapp/setting.yml">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="924">
-                  <caret line="44" lean-forward="true" selection-start-line="44" selection-end-line="44" />
+                <state relative-caret-position="294">
+                  <caret line="14" column="15" lean-forward="true" selection-start-line="14" selection-start-column="15" selection-end-line="14" selection-end-column="15" />
                   <folding>
                     <marker date="1541162755487" expanded="true" signature="385:500" ph="..." />
                   </folding>
@@ -167,8 +203,8 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/handlers.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="735">
-                  <caret line="35" column="9" lean-forward="true" selection-start-line="35" selection-start-column="9" selection-end-line="35" selection-end-column="9" />
+                <state relative-caret-position="294">
+                  <caret line="29" column="16" lean-forward="true" selection-start-line="29" selection-start-column="16" selection-end-line="29" selection-end-column="16" />
                   <folding>
                     <marker date="1541749076403" expanded="true" signature="194:277" ph="..." />
                     <marker date="1541749076403" expanded="true" signature="293:497" ph="..." />
@@ -179,6 +215,20 @@
                   </folding>
                 </state>
               </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/test-single-page/setting.yml">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="210">
+                  <caret line="10" column="9" lean-forward="true" selection-start-line="10" selection-start-column="9" selection-end-line="10" selection-end-column="9" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/test-single-page/py/__init__.py">
+              <provider selected="true" editor-type-id="text-editor" />
             </entry>
           </file>
         </leaf>
@@ -194,8 +244,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>parallel</find>
-      <find>print</find>
       <find>init_</find>
       <find>isinstance</find>
       <find>msg'</find>
@@ -221,9 +269,11 @@
       <find>https://200.200.151.26</find>
       <find>_data</find>
       <find>init_pro</find>
-      <find>click</find>
       <find>setting</find>
       <find>setting(</find>
+      <find>click</find>
+      <find>src</find>
+      <find>js_script</find>
     </findStrings>
     <replaceStrings>
       <replace>http://200.200.151.26</replace>
@@ -247,20 +297,24 @@
         <option value="$PROJECT_DIR$/script/get_chrome_tab_pids.js" />
         <option value="$PROJECT_DIR$/scripts/get_chrome_tab_pids.js" />
         <option value="$PROJECT_DIR$/pid_finder.py" />
-        <option value="$PROJECT_DIR$/driver.py" />
         <option value="$PROJECT_DIR$/wapp/setting.yml" />
         <option value="$PROJECT_DIR$/process_logger.py" />
-        <option value="$PROJECT_DIR$/task.py" />
         <option value="$PROJECT_DIR$/wapp/setting-1.yml" />
         <option value="$PROJECT_DIR$/handlers.py" />
         <option value="$PROJECT_DIR$/wapp/setting-login.yml" />
         <option value="$PROJECT_DIR$/main.py" />
+        <option value="$PROJECT_DIR$/test-single-page/setting.yml" />
+        <option value="$PROJECT_DIR$/test-single-page/py/__init__.py" />
+        <option value="$PROJECT_DIR$/driver.py" />
+        <option value="$PROJECT_DIR$/task.py" />
+        <option value="$PROJECT_DIR$/test-single-page/py/process_task_setting.py" />
+        <option value="$PROJECT_DIR$/test-single-page/js/get_pages.js" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="591" />
-    <option name="y" value="4" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="14" />
+    <option name="y" value="27" />
     <option name="width" value="1617" />
     <option name="height" value="1000" />
   </component>
@@ -276,6 +330,23 @@
             <path>
               <item name="wapp_process_test" type="b2602c69:ProjectViewProjectNode" />
               <item name="wapp_process_test" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="wapp_process_test" type="b2602c69:ProjectViewProjectNode" />
+              <item name="wapp_process_test" type="462c0819:PsiDirectoryNode" />
+              <item name="test-single-page" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="wapp_process_test" type="b2602c69:ProjectViewProjectNode" />
+              <item name="wapp_process_test" type="462c0819:PsiDirectoryNode" />
+              <item name="test-single-page" type="462c0819:PsiDirectoryNode" />
+              <item name="js" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="wapp_process_test" type="b2602c69:ProjectViewProjectNode" />
+              <item name="wapp_process_test" type="462c0819:PsiDirectoryNode" />
+              <item name="test-single-page" type="462c0819:PsiDirectoryNode" />
+              <item name="py" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="wapp_process_test" type="b2602c69:ProjectViewProjectNode" />
@@ -399,10 +470,10 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-4" y="-4" width="1838" height="990" extended-state="6" />
+    <frame x="14" y="27" width="1617" height="1000" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.11387507" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.12972292" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -598,17 +669,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/driver.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="294">
-          <caret line="16" column="33" selection-start-line="16" selection-start-column="33" selection-end-line="16" selection-end-column="33" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-            <marker date="1541161925750" expanded="true" signature="84:89" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pid_finder.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1218">
@@ -633,24 +693,30 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/task.py">
+    <entry file="file://$PROJECT_DIR$/wapp/setting-login.yml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="269">
-          <caret line="108" lean-forward="true" selection-start-line="108" selection-end-line="108" />
+        <state relative-caret-position="798">
+          <caret line="38" column="20" selection-start-line="38" selection-start-column="20" selection-end-line="38" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="567">
+          <caret line="27" column="36" selection-start-line="27" selection-start-column="36" selection-end-line="27" selection-end-column="36" />
           <folding>
-            <element signature="e#0#9#0" expanded="true" />
-            <marker date="1541748810876" expanded="true" signature="233:321" ph="..." />
-            <marker date="1541748810876" expanded="true" signature="340:341" ph="..." />
-            <marker date="1541748810876" expanded="true" signature="384:3541" ph="..." />
-            <marker date="1541748810876" expanded="true" signature="7032:7038" ph="..." />
+            <element signature="e#0#11#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/test-single-page/py/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/handlers.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="735">
-          <caret line="35" column="9" lean-forward="true" selection-start-line="35" selection-start-column="9" selection-end-line="35" selection-end-column="9" />
+        <state relative-caret-position="294">
+          <caret line="29" column="16" lean-forward="true" selection-start-line="29" selection-start-column="16" selection-end-line="29" selection-end-column="16" />
           <folding>
             <marker date="1541749076403" expanded="true" signature="194:277" ph="..." />
             <marker date="1541749076403" expanded="true" signature="293:497" ph="..." />
@@ -662,29 +728,62 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/driver.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="571">
+          <caret line="39" column="22" lean-forward="true" selection-start-line="39" selection-start-column="22" selection-end-line="39" selection-end-column="22" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+            <marker date="1541756476714" expanded="true" signature="84:89" ph="..." />
+            <marker date="1541756476714" expanded="true" signature="997:1016" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test-single-page/js/get_pages.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="651">
+          <caret line="31" column="13" selection-start-line="31" selection-start-column="13" selection-end-line="31" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/wapp/setting.yml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="924">
-          <caret line="44" lean-forward="true" selection-start-line="44" selection-end-line="44" />
+        <state relative-caret-position="294">
+          <caret line="14" column="15" lean-forward="true" selection-start-line="14" selection-start-column="15" selection-end-line="14" selection-end-column="15" />
           <folding>
             <marker date="1541162755487" expanded="true" signature="385:500" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wapp/setting-login.yml">
+    <entry file="file://$PROJECT_DIR$/task.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="798">
-          <caret line="38" column="20" lean-forward="true" selection-start-line="38" selection-start-column="20" selection-end-line="38" selection-end-column="20" />
+        <state relative-caret-position="215">
+          <caret line="225" column="34" selection-start-line="225" selection-start-column="34" selection-end-line="225" selection-end-column="34" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+            <marker date="1541756570078" expanded="true" signature="233:321" ph="..." />
+            <marker date="1541756570078" expanded="true" signature="340:341" ph="..." />
+            <marker date="1541756570078" expanded="true" signature="384:3541" ph="..." />
+            <marker date="1541756570078" expanded="true" signature="7079:7085" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
+    <entry file="file://$PROJECT_DIR$/test-single-page/setting.yml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
+        <state relative-caret-position="210">
+          <caret line="10" column="9" lean-forward="true" selection-start-line="10" selection-start-column="9" selection-end-line="10" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test-single-page/py/process_task_setting.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="42">
+          <caret line="2" column="17" lean-forward="true" selection-start-line="2" selection-start-column="17" selection-end-line="2" selection-end-column="17" />
           <folding>
-            <element signature="e#0#11#0" expanded="true" />
+            <marker date="1541756674231" expanded="true" signature="20:25" ph="..." />
           </folding>
         </state>
       </provider>

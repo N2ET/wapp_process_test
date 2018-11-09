@@ -40,5 +40,8 @@ class Driver(object):
     def execute(self):
         pass
 
+    def execute_file(self, file):
+        pass
+
     def get_driver(self):
         return self._driver
