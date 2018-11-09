@@ -225,12 +225,14 @@ class Task(object):
         if hasattr(module, 'run'):
             module.run(self, self._data)
 
-    def run_js_script(self, script=None):
+    def run_js_script(self, script=None, file=None):
         if not script:
             script = self._config.get('script')
         if not script:
+            if not file:
+                file = self._config.get('src')
             file = open(
-                self._get_file_path(self._config.get('src')),
+                self._get_file_path(file),
                 'r',
                 encoding='utf8'
             )

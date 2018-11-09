@@ -1,16 +1,16 @@
 var linkSelector = '.header-nav_column-title-link';
 
-function $ = function(selector) {
-    return document.querySelector(selector);
+function $(selector) {
+    return document.querySelectorAll(selector);
 }
 
 var map = {};
 var pages = [];
 
-var homePageDom = $('[utid=home-page] .active');
+var homePageDom = $('[utid=home-page] .active')[0];
 pages.push({
     text: homePageDom.innerText.trim(),
-    url: dom.href
+    url: homePageDom.href
 });
 
 $(linkSelector).forEach(function(dom) {
