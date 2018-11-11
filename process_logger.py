@@ -17,7 +17,7 @@ class ProcessLogger(Logger):
             'pre_interval': 0,
             'end_interval': 0,
             'output_dir': '',
-            'filename': 'process_logger_log'
+            'filename': 'data'
         })
 
         super(ProcessLogger, self).__init__(self._config)
@@ -76,7 +76,7 @@ class ProcessLogger(Logger):
             self._timer.start()
 
     def delay_start(self):
-        pre_interval = self._config['pre_interval']
+        pre_interval = self._config['start_interval']
         if isinstance(pre_interval, (int, float)):
             self.log('wait %s sec(s) to start' % pre_interval)
             self.start(pre_interval)

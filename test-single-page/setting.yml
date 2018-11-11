@@ -1,5 +1,7 @@
+# 单页面，来回切换页面与空页面，记录每个页面的内存使用趋势与内存增量
+
 global:
-  root: ''
+  root: '' # setting.yml所在路径，自动填充
 
   login_page: &LOGIN_PAGE 'https://200.200.103.80:4430/login'
   empty_page: &EMPTY_PAGE 'https://200.200.103.80:4430/single/#/mod-empty/index'
@@ -74,7 +76,6 @@ task:
     name: 'test-single-page'
     type: 'parallel'
     task:
-#      -
-#        *TASK_CONFIG
+      # 使用py/process_task_setting.py 构造task
 
 

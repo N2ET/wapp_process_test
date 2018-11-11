@@ -45,3 +45,6 @@ class Driver(object):
 
     def get_driver(self):
         return self._driver
+
+    def quit(self):
+        self._driver.quit()

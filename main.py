@@ -80,7 +80,7 @@ def main(args):
 
     process_logger = t.get_process_logger()
     if process_logger:
-        process_logger.start()
+        process_logger.delay_start()
     t.run()
     if process_logger:
         process_logger.delay_stop()

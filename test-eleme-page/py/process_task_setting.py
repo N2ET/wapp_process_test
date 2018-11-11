@@ -12,6 +12,8 @@ def run(task, data):
         config = copy.deepcopy(task_config)
         config['name'] = page['name']
         for opr_task in config['task']:
-            if opr_task.get('url') == '__url__':
+            if opr_task.get('url') == '__task_url__':
                 opr_task['url'] = page['url']
         page_tasks.append(config)
+    data['task'][0]['task'] = page_tasks
+    task.get_driver().quit()

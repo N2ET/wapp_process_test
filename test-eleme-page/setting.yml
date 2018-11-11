@@ -1,0 +1,92 @@
+# 单页面，来回切换页面与空页面（内容区域为空），记录每个页面的内存使用趋势与内存增量
+
+global:
+  root: '' # setting.yml所在路径，自动填充
+
+  #login_page: &LOGIN_PAGE 'https://element-cn.eleme.io/login'
+  empty_page: &EMPTY_PAGE 'http://element-cn.eleme.io/#/zh-CN/resource' # 假定该页为内容区域空白页
+  component_page: &COMPONENT_PAGE 'http://element-cn.eleme.io/#/zh-CN/component/installation'
+
+#  login: &LOGIN
+#    name: 'login'
+#    run:
+#      times: 1
+#    task:
+#      -
+#        opr: 'navigate_to'
+#        url: *LOGIN_PAGE
+#      -
+#        opr: 'sleep'
+#        time: 3
+#      -
+#        opr: 'js_script'
+#        src: 'js/login.js'
+
+  task_config: &TASK_CONFIG
+    name: '__task_name__' # use target page name
+    run:
+      times: 10
+    driver: &DRIVER
+      default_url: *EMPTY_PAGE
+    task:
+#      -
+#        *LOGIN # 如果需要先登录才能访问，添加*LOGIN任务项
+#      -
+#        opr: 'sleep'
+#        time: 5
+      -
+        run:
+          times: 1
+        opr: 'sleep'
+        time: 30
+      -
+        opr: 'navigate_to'
+        url: '__task_url__' # target page url
+      -
+        opr: 'sleep'
+        time: 5
+      -
+        opr: 'navigate_to'
+        url: *EMPTY_PAGE
+      -
+        opr: 'sleep'
+        time: 5
+
+pre:
+  name: 'process task config'
+  driver:
+    default_url: *COMPONENT_PAGE
+  logger:
+    debug: True
+  task:
+#    -
+#      *LOGIN
+#    -
+#      opr: 'sleep'
+#      time: 3
+#    -
+#      opr: 'navigate_to'
+#      url: *EMPTY_PAGE
+    -
+      opr: 'sleep'
+      time: 5
+    -
+      opr: 'py_script'
+      src: 'py.process_task_setting'
+
+task:
+  -
+    name: 'test-eleme-page'
+    run:
+      type: 'parallel'
+    logger: &LOGGER
+      debug: True
+    process_logger: &PROCESS_LOGGER
+      debug: True
+      interval: 1
+      start_interval: 10
+      end_interval: 60
+    task:
+      # 使用py/process_task_setting.py 构造task
+
+
