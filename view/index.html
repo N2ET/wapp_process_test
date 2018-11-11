@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>view</title>
+        <style>
+            #body {
+                margin: 40px 100px;
+            }
+
+            .chart {
+                margin-bottom: 40px;
+            }
+
+            #line-container {
+                height: 400px;
+            }
+
+            #range-container {
+                height: 300px;
+            }
+
+            .toolbar {
+                margin: 10px 0 0 0;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="body">
+            <div class="chart">
+                <div id="line-container"></div>
+                <div class="toolbar">
+                    <label><input type="checkbox" v-model="onlyPrivate" />只显示专用内存</label>
+
+                    <label><input type="checkbox" v-model="displayTime" />显示x轴时间</label>
+                </div>
+            </div>
+
+            <div class="chart">
+                <div id="range-container"></div>
+                <div class="toolbar">
+                    排序方式：
+                    <select v-model="sortBy">
+                        <option value="total" selected>按总大小排序</option>
+                        <option value="init">按初始大小排序</option>
+                        <option value="increaseSize">按增量大小排序</option>
+                        <option value="increaseRate">按增量百分比排序</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <script src="./data/data.js"></script>
+        <script src="./highcharts.js"></script>
+        <script src="./jquery-2-1-1.js"></script>
+        <script src="./vue.js"></script>
+        <script src="./index.js"></script>
+    </body>
+</html>

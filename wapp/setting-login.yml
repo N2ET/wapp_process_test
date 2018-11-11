@@ -1,0 +1,49 @@
+global:
+  root: ''
+
+refs:
+  login_page: &LOGIN_PAGE 'https://200.200.103.80:4430/login'
+  empty_page: &EMPTY_PAGE 'https://200.200.103.80:4430/single/#/mod-empty/index'
+  login: &LOGIN
+    name: 'login'
+    run:
+      times: 1
+    task:
+      -
+        opr: 'navigate_to'
+        url: *LOGIN_PAGE
+      -
+        opr: 'sleep'
+        time: 3
+      -
+        opr: 'js_script'
+        src: 'js/login.js'
+
+task:
+  -
+    name: 'login-and-switch-5-times'
+    driver:
+      default_url: *LOGIN_PAGE
+    logger:
+      debug: True
+    process_logger:
+      interval: 1
+      start_interval: 8
+      end_interval: 10
+    run:
+      times: 3
+    task:
+      -
+        *LOGIN
+      -
+        opr: 'sleep'
+        time: 5
+      -
+        opr: 'navigate_to'
+        url: 'https://200.200.103.80:4430/single/#/mod-index/index'
+      -
+        opr: 'sleep'
+        time: 5
+      -
+        opr: 'navigate_to'
+        url: *EMPTY_PAGE
