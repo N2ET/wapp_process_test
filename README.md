@@ -11,10 +11,10 @@
 注意，当前存在一些限制尚待完善，当前是能正常运行的工具：
 * 只支持chrome，且只有chrome 68支持自动获取进程id，其他版本可能获取到错误的进程id。同时注意，chrome默认一个域名对应一下标签页进程。
 * 只支持内置的任务操作，除自定义js、py脚本外，暂不支持自定义的任务类型
-* 支持多线程执行任务，未限制线程数量，另外在多个任务修改任务配置可能导致错误
+* 支持多线程执行任务，未限制线程数量，另外在多个任务线程中修改任务配置可能导致错误
 * 内置的操作待扩充
 * 发布为python包
-* 从log-memory移入图表生成相关文件
+* docs待完善
 
 ## 配置文件
 
@@ -117,10 +117,17 @@ task:
 ```
 
 ## 统计数据
-统计数据示例，`test-eleme-page/setting.yml`，将配置文件所在位置process_logger目录下生成的`data.js`拷贝到`view/data`目录，查看`view/index.html`文件。效果如下：
+### 统计数据示例1
+
+使用配置文件`test-eleme-page/setting.yml`，将配置文件所在位置process_logger目录下生成的`data.js`拷贝到`view/data`目录，查看`view/index.html`文件。效果如下：
 
 ![test-eleme-page](./docs/test-eleme-page.PNG)
 
 由上图可以看出，同一个页面经过多次切换后，内存成持续增长的趋势。如果存在内存问题，则可根据增长量选择选择处理的页面，使用devtool进行更详细的定位。
 
 需要注意，切换页面内存并不一定全部即刻回收，但是增长趋势能说明一定的问题。
+
+### 统计数据示例2
+使用配置文件`test-eleme-page/setting-all-page.yml`，在一个浏览器中，将各个页面按顺序来回切换5次
+
+![test-eleme-page-all-page](./docs/test-eleme-page-all-page.PNG)

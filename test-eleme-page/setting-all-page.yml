@@ -1,0 +1,53 @@
+# 单页面，来回切换页面与空页面（内容区域为空），记录每个页面的内存使用趋势与内存增量
+
+global:
+  root: '' # setting.yml所在路径，自动填充
+
+  empty_page: &EMPTY_PAGE 'http://element-cn.eleme.io/#/zh-CN/resource' # 假定该页为内容区域空白页
+  component_page: &COMPONENT_PAGE 'http://element-cn.eleme.io/#/zh-CN/component/installation'
+
+  task_config: &TASK_CONFIG
+    name: '__task_name__' # use target page name
+    task:
+      -
+        opr: 'navigate_to'
+        url: '__task_url__' # target page url
+      -
+        opr: 'sleep'
+        time: 5
+
+pre:
+  name: 'process task config'
+  driver:
+    default_url: *COMPONENT_PAGE
+  logger:
+    debug: True
+  task:
+    -
+      opr: 'sleep'
+      time: 5
+    -
+      opr: 'py_script'
+      src: 'py.process_task_setting_all_page'
+
+task:
+  -
+    name: 'test-eleme-page-all-page'
+    run:
+      times: 5
+    driver:
+      default_url: *EMPTY_PAGE
+    logger:
+      debug: True
+    process_logger:
+      debug: True
+      interval: 1
+      start_interval: 10
+      end_interval: 60
+    task:
+      -
+        opr: 'sleep'
+        time: 20
+
+
+
