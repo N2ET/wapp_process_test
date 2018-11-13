@@ -3,6 +3,7 @@ import os
 from task import Task
 import getopt
 import sys
+import json
 
 
 def load_config(config_path):
@@ -17,22 +18,42 @@ def load_config(config_path):
     return config
 
 
+def save_config(config_path, config):
+    if os.path.exists(config_path):
+        print('setting file exists, %s' % config_path)
+    try:
+        file = open(config_path, 'w', encoding='utf-8')
+        yaml.dump(config, file, default_flow_style=False)
+        file.close()
+    except Exception as e:
+        print(e)
+
+
 def main(args):
     try:
         opts, arg = getopt.getopt(
             args,
-            'f:',
-            ['file=']
+            'psdf:',
+            ['pre, save-setting-file, direct, file=']
         )
     except getopt.GetoptError as e:
         print('argv error, %s ' % e)
         return
 
     file = None
+    save_setting_file = False
+    skip_pre_task = False
+    only_pre_task = False
 
     for k, v in opts:
         if k == '-f':
             file = v
+        if k == '-s':
+            save_setting_file = True
+        if k == '-d':
+            skip_pre_task = True
+        if k == '-p':
+            only_pre_task = True
 
     if not file:
         print('args -f missing')
@@ -56,17 +77,34 @@ def main(args):
 
     print('load setting file, %s' % file)
 
+    setting = json.loads(
+        json.dumps(setting)
+    )
+
     setting['global']['root'] = setting_root
 
-    if setting.get('pre'):
+    if setting.get('pre') and not skip_pre_task:
         setting['root'] = setting_root
         pre = Task(
             setting['pre'],
             setting
         )
         pre.run()
+        del setting['pre']
+        if save_setting_file:
+            save_config(
+                file + '.save.yml',
+                setting
+            )
+
+    if only_pre_task:
+        return
+
+    if skip_pre_task:
+        print('skip pre task')
 
     if not setting.get('task'):
+        print('no task setting')
         return
 
     process_logger_config = setting.get('task')[0].get('process_logger')
