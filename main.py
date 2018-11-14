@@ -117,7 +117,7 @@ def main(args):
     )
 
     process_logger = t.get_process_logger()
-    if process_logger:
+    if process_logger and process_logger.get_config().get('auto_start') is not False:
         process_logger.delay_start()
     t.run()
     if process_logger:

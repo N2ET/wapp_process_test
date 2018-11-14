@@ -92,14 +92,19 @@ class Task(object):
         if self._process_logger and \
                 self._process_logger.get_config()\
                         .get('log_driver') is not False:
-            pid = self._driver.get_pid()
-            self._logger.debug('get page pid: %s' % pid)
-            if not isinstance(pid, int):
+            pids = self._driver.get_pids(
+                self._process_logger.get_config()
+                    .get('log_all_process', False)
+            )
+            self._logger.debug('get page pid(s): %s' % pids)
+            if not isinstance(pids, list):
                 return
-            self._process_logger.add({
-                'name': self._name,
-                'pid': pid
-            })
+
+            pids = map(lambda pid_info: {
+                'name': ('%s %s (%s)' % (self._name, pid_info['name'], pid_info['pid'])),
+                'pid': pid_info['pid']
+            }, pids)
+            self._process_logger.add(list(pids))
 
     def _init_process_logger(self):
         config = self._config.get('process_logger')
@@ -188,7 +193,11 @@ class Task(object):
         self._threads = []
 
     def log_event(self, event, msg):
-        self._logger.log_event({
+        logger = self._logger
+        if self._process_logger:
+            logger = self._process_logger
+
+        logger.log_event({
             'name': self._name,
             'event': event,
             'msg': msg
@@ -238,7 +247,7 @@ class Task(object):
             )
             script = file.read()
             file.close()
-        return self._driver.get_driver().execute_script(script)
+        return self._driver.execute_script(script)
 
     def get_config(self):
         return self._config

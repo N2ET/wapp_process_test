@@ -4,17 +4,17 @@ import threading
 import json
 import psutil
 import util
-from logger import Logger
+from logger import EventLogger
 
 
-class ProcessLogger(Logger):
+class ProcessLogger(EventLogger):
 
     def __init__(self, config={}):
         self._config = config
 
         util.apply_if(self._config, {
             'interval': 1,
-            'pre_interval': 0,
+            'start_interval': 0,
             'end_interval': 0,
             'output_dir': '',
             'filename': 'data'
@@ -37,7 +37,7 @@ class ProcessLogger(Logger):
         )
         self._timer.start()
 
-    def _collect(self):
+    def _collect(self, extra_data=None):
         data = self._data
 
         for p in self._process:
@@ -51,12 +51,17 @@ class ProcessLogger(Logger):
             self.log("%d(%s): %d Mb" % (p['pid'], p['name'], mem.private / 1024 / 1024))
             key = p['name']
             if data.get(key):
-                data[key]['time'].append(time.time())
-                data[key]['value'].append({
+                value = {
                     "private": mem.private,
                     "rss": mem.rss,
                     "peak_wset": mem.peak_wset
-                })
+                }
+
+                if extra_data:
+                    value['data'] = extra_data
+
+                data[key]['time'].append(time.time())
+                data[key]['value'].append(value)
             else:
                 data[key] = p.copy()
                 data[key]['time'] = []
@@ -185,6 +190,15 @@ class ProcessLogger(Logger):
     def get_config(self):
         return self._config
 
+    def get_process_stat(self, pid):
+        ret = {}
+        try:
+            stat = psutil.Process(pid)
+            ret['mem'] = stat.memory_info()
+            return ret
+        except Exception:
+            pass
 
-
-
+    def log_event(self, event={}):
+        super(ProcessLogger, self).log_event(event)
+        self._collect(event)

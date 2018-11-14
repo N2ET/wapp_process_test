@@ -50,7 +50,7 @@ class EventLogger(Logger):
     def log_debug_event(self, event):
         if not self._debug:
             return
-        self._log_event(event)
+        self.log_event(event)
 
     def get_events(self):
         return self._events

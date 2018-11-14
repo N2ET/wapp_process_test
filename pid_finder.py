@@ -1,73 +1,142 @@
 import time
 import os
-# from selenium.webdriver.common.keys import Keys
-# from selenium.webdriver.common.action_chains import ActionChains
+import psutil
 
-# only for chrome 68!
+from process_logger import ProcessLogger
+process_logger = ProcessLogger()
 
-pid_script = ''
-support_auto_get_pid = True
+scripts = {
+
+}
 
 
-def get_pid_script(script_path):
-    global pid_script
-    if pid_script:
-        return pid_script
+def get_pid_script(browser_type, script_path):
+    if scripts.get(browser_type):
+        return scripts[browser_type]
 
+    script_path = os.path.join(os.path.dirname(__file__), script_path)
     file = open(script_path, 'r', encoding='utf-8')
     pid_script = file.read()
     file.close()
+
+    scripts[browser_type] = pid_script
     return pid_script
 
 
-def get_current_pids(driver):
+def get_chrome_current_pids(driver):
+    pid_script = get_pid_script(
+        'Chrome',
+        './scripts/get_chrome_tab_pids.js'
+    )
     driver.execute_script(pid_script)
     time.sleep(0.5)
     return driver.execute_script(pid_script)
 
 
 def open_new_tag(driver, url):
-    # ActionChains(driver).key_down(Keys.CONTROL).send_keys('LMB')\
-    #    .key_up(Keys.CONTROL).perform()
     driver.execute_script('window.open("' + url + '")')
 
 
-def auto_get_pid(config, driver):
+def get_pids(driver, browser_type, config):
+    pids = []
+    if browser_type == 'Chrome':
+        pids = get_chrome_pids(driver, config)
+    elif browser_type == 'Firefox':
+        pids = get_firefox_pids(driver, config)
+    elif browser_type == 'Ie':
+        pids = get_ie_pids(driver, config)
+
+    return pids
+
+
+def get_chrome_pids(driver, config):
     url = config['url']
+    driver.get(url)
+    open_new_tag(driver, 'about:blank')
+    driver.switch_to.window(driver.window_handles[1])
     driver.get('chrome://memory-internals')
-    get_pid_script(
-        os.path.join(os.path.dirname(__file__), './scripts/get_chrome_tab_pids.js')
-    )
-    get_current_pids(driver)
-    init_handle = driver.current_window_handle
+
     time.sleep(1)
-    pids_init = get_current_pids(driver)
-    open_new_tag(driver, url)
-    driver.switch_to.window(init_handle)
-
-    pids_after_tab1 = get_current_pids(driver)
-
-    target_pids = set(pids_after_tab1) - set(pids_init)
+    pids = get_chrome_current_pids(driver)
 
     driver.close()
     driver.switch_to.window(driver.window_handles[0])
-    if len(target_pids) == 1:
-        pid = list(target_pids)[0]
-        print('[%s] pid: %s'%(config['name'], pid))
-        return pid
 
-    print('[%s] auto find tag pid fail'%config['name'])
-    print('[%s] %s -> %s'%(config['name'], pids_init, pids_after_tab1))
+    return pids
 
 
-def get_pid(driver, config):
-    global support_auto_get_pid
-    if support_auto_get_pid:
-        pid = auto_get_pid(config, driver)
-        if not pid:
-            support_auto_get_pid = False
-        else:
-            return pid
-    pid = input('[%s] input pid: ' % config['name'])
-    return int(pid)
+def get_firefox_pids(driver, config):
+    url = config['url']
+    driver.get(url)
 
+    # 不能通过脚本打开
+    open_new_tag(driver, 'about:blank')
+    driver.switch_to.window(driver.window_handles[1])
+    driver.get('about:memory')
+
+    time.sleep(3)
+    driver.execute_script('''
+        var dom = document.getElementById('measureButton');
+        if (dom) {
+            dom.click();
+        }
+    ''')
+
+    time.sleep(1)
+
+    # 通过url查找进程id，不包括浏览器主进程id
+    script = get_pid_script(
+        'Firefox',
+        os.path.join(os.path.dirname(__file__), './scripts/get_firefox_tab_pids.js')
+    ) + ('return getPids("%s");' % url)
+
+    pids = driver.execute_script(script)
+    driver.close()
+    driver.switch_to.window(driver.window_handles[0])
+    return pids
+
+
+def get_ie_pids(driver, config):
+    return []
+
+
+def get_all_pids(browser_type):
+    name = {
+        'Firefox': 'firefox.exe',
+        'Chrome': 'chrome.exe',
+        'Ie': 'iexplore.exe'
+    }[browser_type]
+    pids = psutil.pids()
+    ret = set()
+    for pid in pids:
+        try:
+            p = psutil.Process(pid)
+            if p.name() == name:
+                ret.add(pid)
+        except Exception:
+            pass
+
+    return ret
+
+
+def get_max_mem_pid(pids):
+    if len(pids) == 1:
+        return pids
+
+    max_mem = 0
+    max_pid = 0
+
+    ret = []
+
+    for pid in pids:
+        info = process_logger.get_process_stat(pid)
+        if not info:
+            continue
+        if max_mem < info['mem'].private:
+            max_mem = info['mem'].private
+            max_pid = pid
+
+    if max_pid:
+        return [max_pid]
+    else:
+        return ret
