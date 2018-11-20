@@ -100,11 +100,16 @@ class Task(object):
             if not isinstance(pids, list):
                 return
 
-            pids = map(lambda pid_info: {
-                'name': ('%s %s (%s)' % (self._name, pid_info['name'], pid_info['pid'])),
-                'pid': pid_info['pid']
-            }, pids)
+            pids = self._format_driver_process(pids)
+
             self._process_logger.add(list(pids))
+
+    def _format_driver_process(self, pids):
+        pids = map(lambda pid_info: {
+            'name': ('%s %s (%s)' % (self._name, pid_info['name'], pid_info['pid'])),
+            'pid': pid_info['pid']
+        }, pids)
+        return pids
 
     def _init_process_logger(self):
         config = self._config.get('process_logger')
@@ -193,15 +198,20 @@ class Task(object):
         self._threads = []
 
     def log_event(self, event, msg):
-        logger = self._logger
-        if self._process_logger:
-            logger = self._process_logger
 
-        logger.log_event({
+        event_data = {
             'name': self._name,
             'event': event,
             'msg': msg
-        })
+        }
+
+        pids = self._driver.get_browser_pids()
+
+        if self._process_logger:
+            self._process_logger.log_event(event_data, pids)
+
+        else:
+            self._logger.log_event(event_data)
 
     def run_opr(self):
         opr = self._config.get('opr', None)

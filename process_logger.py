@@ -17,7 +17,9 @@ class ProcessLogger(EventLogger):
             'start_interval': 0,
             'end_interval': 0,
             'output_dir': '',
-            'filename': 'data'
+            'filename': 'data',
+            'ignore_events': [],
+            'log_event': True
         })
 
         super(ProcessLogger, self).__init__(self._config)
@@ -27,6 +29,7 @@ class ProcessLogger(EventLogger):
 
         self._data = {}
         self._process = []
+        self._processMap = {}
         self._timer = None
 
     def _run(self):
@@ -37,10 +40,13 @@ class ProcessLogger(EventLogger):
         )
         self._timer.start()
 
-    def _collect(self, extra_data=None):
+    def _collect(self, pids=None, extra_data=None):
         data = self._data
 
-        for p in self._process:
+        if not pids:
+            pids = self._process
+
+        for p in pids:
             try:
                 stat = psutil.Process(p['pid'])
             except Exception as e:
@@ -48,8 +54,10 @@ class ProcessLogger(EventLogger):
                 continue
 
             mem = stat.memory_info()
-            self.log("%d(%s): %d Mb" % (p['pid'], p['name'], mem.private / 1024 / 1024))
-            key = p['name']
+            pid = p['pid']
+            name = self._processMap[pid].get('name')
+            self.log("%d(%s): %d Mb" % (pid, name, mem.private / 1024 / 1024))
+            key = name
             if data.get(key):
                 value = {
                     "private": mem.private,
@@ -179,10 +187,13 @@ class ProcessLogger(EventLogger):
 
     def add(self, process):
         if isinstance(process, list):
+            for p in process:
+                self._processMap[p['pid']] = p
             self._process += process
 
         if isinstance(process, dict):
             self._process.append(process)
+            self._processMap[process['pid']] = process
 
     def remove(self, process):
         pass
@@ -199,6 +210,18 @@ class ProcessLogger(EventLogger):
         except Exception:
             pass
 
-    def log_event(self, event={}):
+    def log_event(self, event=None, pids=None):
+        log_event = self._config.get('log_event')
+        if not log_event:
+            return
+
         super(ProcessLogger, self).log_event(event)
-        self._collect(event)
+
+        if not self._timer:
+            return
+
+        ignore_events = self._config.get('ignore_events')
+        if isinstance(ignore_events, list) and event['event'] in ignore_events:
+            return
+
+        self._collect(pids, event)

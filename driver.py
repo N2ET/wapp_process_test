@@ -19,6 +19,7 @@ class Driver(object):
         self._config = config
         self._drivers = None
         self._pids = {}
+        self._browser_pids = []
 
     # def __del__(self):
     #     if self._drivers:
@@ -114,6 +115,9 @@ class Driver(object):
             pids += ret
 
         self.execute(collect_pids)
+
+        self._browser_pids = pids
+
         return pids
 
     def execute(self, cb):
@@ -143,3 +147,6 @@ class Driver(object):
         self.execute(
             lambda browser_type, driver: driver.quit()
         )
+
+    def get_browser_pids(self):
+        return self._browser_pids

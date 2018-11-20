@@ -26,12 +26,33 @@
     </head>
     <body>
         <div id="body">
+            <div class="top-toolbar">
+                <select v-model="curDataKey">
+                    <option v-for="key in dataKeys" :value="key">
+                        {{ key }}
+                    </option>
+                </select>
+            </div>
+
             <div class="chart">
                 <div id="line-container"></div>
                 <div class="toolbar">
-                    <label><input type="checkbox" v-model="onlyPrivate" />只显示专用内存</label>
+                    <label><input type="checkbox" value="private" v-model="displayTypes" />显示专用内存</label>
+                    <label><input type="checkbox" value="rss" v-model="displayTypes" />显示工作集</label>
+                    <label><input type="checkbox" value="peak_wset" v-model="displayTypes" />显示工作集峰值</label>
 
                     <label><input type="checkbox" v-model="displayTime" />显示x轴时间</label>
+
+                    <label><input type="checkbox" v-model="removeCongestedPoint">合并间隔小于1s的点</label>
+
+                    <label><input type="checkbox" v-model="showAll">显示所有</label>
+
+                    <div class="event-selector">
+                        显示事件：
+                        <label v-for="event in events">
+                            <input type="checkbox" :value="event" v-model="visibleEvents">{{event}}
+                        </label>
+                    </div>
                 </div>
             </div>
 
@@ -45,6 +66,15 @@
                         <option value="increaseSize">按增量大小排序</option>
                         <option value="increaseRate">按增量百分比排序</option>
                     </select>
+
+                    数据类型：
+                    <select v-model="rangeDataType">
+                        <option value="private" selected>专用内存</option>
+                        <option value="rss">工作集</option>
+                        <option value="peak_wset">工作集峰值</option>
+                    </select>
+
+                    时间：<input type="text" v-model="startTime" /> - <input type="text" v-model="endTime" />
                 </div>
             </div>
         </div>

@@ -59,6 +59,15 @@ def start_process_logger_formatter(task):
     return 'start process_logger'
 
 
+def reload(task):
+    driver = task.get_driver()
+    driver.execute(lambda browser_type, dr: dr.execute_script('location.reload();'))
+
+
+def reload_formatter(task):
+    return 'reload'
+
+
 def empty_opr(task):
     config = task.get_config()
     print('no such handler %s' % config.get('opr'))

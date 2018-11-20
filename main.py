@@ -108,8 +108,16 @@ def main(args):
         return
 
     process_logger_config = setting.get('task')[0].get('process_logger')
-    if process_logger_config and not process_logger_config.get('output_dir'):
-        process_logger_config['output_dir'] = os.path.join(setting_root, 'process_logger')
+    if process_logger_config:
+        if not process_logger_config.get('output_dir'):
+            process_logger_config['output_dir'] = os.path.join(setting_root, 'process_logger')
+
+        ignore_events = process_logger_config.get('ignore_events', None)
+        if not isinstance(ignore_events, list) :
+            process_logger_config['ignore_events'] = [
+                'sleep',
+                'start_process_logger'
+            ]
 
     t = Task(
         setting['task'][0],

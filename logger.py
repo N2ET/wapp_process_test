@@ -29,7 +29,7 @@ class Logger(object):
 
 class EventLogger(Logger):
 
-    def __init__(self, config = {}):
+    def __init__(self, config={}):
 
         super(EventLogger, self).__init__(config)
         self._events = []
@@ -37,7 +37,7 @@ class EventLogger(Logger):
     '''
     thread safe?
     '''
-    def log_event(self, event = {}):
+    def log_event(self, event={}):
         self.debug(event)
 
         self._events.append({

@@ -5,26 +5,37 @@ var typeText = {
     rss: '工作集',
     peak_wset: '峰值工作集'
 };
-var defaultVisible = ['private'];
 
-var dataItems = Object.keys(jsonData);
-jsonData = jsonData[
-    dataItems[dataItems.length - 1]
-].data;
+var oriJsonData = jsonData;
+
+function eachLogData(data, callback) {
+    Object.keys(data).forEach(function (key) {
+        var jsonItemData = data[key];
+        jsonItemData.value.forEach(function (item, itemIndex) {
+            callback(item, itemIndex, jsonItemData);
+        })
+    });
+}
 
 function formatData() {
     Object.keys(jsonData).forEach(function (key) {
         var jsonItemData = jsonData[key];
         jsonItemData.value.forEach(function (item, itemIndex) {
             Object.keys(item).forEach(function (itemKey) {
-                var dataKey = key + '_' + itemKey;
 
-                if(vue.onlyPrivate) {
-                    if(itemKey !== 'private') {
-                        return;
-                    }
-                    dataKey = key;
+                if(itemKey === 'data') {
+                    return;
                 }
+
+                if (item.data && vue.visibleEvents.indexOf(item.data.event) === -1) {
+                    return;
+                }
+
+                if (vue.displayTypes.indexOf(itemKey) === -1) {
+                    return;
+                }
+
+                var dataKey = key + '_' + itemKey;
 
                 var data = seriesMap[dataKey];
                 if (!data) {
@@ -34,19 +45,47 @@ function formatData() {
                         key: key,
                         itemKey: itemKey,
                         dataType: itemKey,
-                        visible: defaultVisible.indexOf(itemKey) !== -1,
+                        visible: vue.seriesVisibleState[dataKey] !== false,
                         pointData: [],
                         yData: []
                     };
                     seriesMap[dataKey] = data;
                 }
 
-                var point = [
-                    parseInt(jsonItemData.time[itemIndex]) * 1000,
-                    item[itemKey]
-                ];
+
+                var time = parseInt(jsonItemData.time[itemIndex]) * 1000;
+                var value = item[itemKey];
+
+                var event = item.data;
+                var point = {
+                    x: time,
+                    y: value,
+                    color: event ? 'pink': '',
+                    marker: event ? {
+                        enabled: true
+                    } : {
+                        enabled: false
+                    },
+                    event: event ? [event] : null
+                };
+
+                var lastPoint = data.pointData[data.pointData.length - 1];
+
+                // 去除间隔小于1s的点
+                if (lastPoint && Math.abs(lastPoint.x - point.x) < 1000) {
+                    if (event && !lastPoint.event) {
+                        data.pointData.pop();
+                        data.yData.pop();
+                    } else if (event && lastPoint.event) {
+                        lastPoint.event.push(event);
+                        return;
+                    } else {
+                        return;
+                    }
+                }
+
                 data.pointData.push(point);
-                data.yData.push(item[itemKey]);
+                data.yData.push(value);
 
                 if (!vue.displayTime) {
                     point = item[itemKey];
@@ -106,7 +145,14 @@ function drawLineChart() {
         plotOptions: {
             series: {
                 marker: {
-                    enabled: false
+                    enabled: true
+                },
+                turboThreshold: 10000,
+                events: {
+                    legendItemClick: function() {
+                        var name = this.name;
+                        vue.seriesVisibleState[name] = !this.visible;
+                    }
                 }
             },
             spline: {
@@ -116,8 +162,18 @@ function drawLineChart() {
                         var seriesName = this.series.name;
                         var seriesColor = this.series.color;
                         var value = formatMemory(this.y);
+                        var event = this.event;
+                        var ret = ['<span style="color:' + seriesColor + '">\u25CF</span> ' + seriesName + ': <b>' + value + '</b>'];
 
-                        return '<span style="color:' + seriesColor + '">\u25CF</span> ' + seriesName + ': <b>' + value + '</b><br/>';
+                        if (event) {
+                            event.forEach(function(e) {
+                                ret.push('<span style="color:' + seriesColor + '">\u25CF</span> event: <b>' + e.event + '</b>');
+                                ret.push('<span style="color:' + seriesColor + '">\u25CF</span> msg: <b>' + e.msg + '</b>');
+                            });
+
+                        }
+
+                        return ret.join('<br>');
                     }
                 }
             }
@@ -143,14 +199,46 @@ function drawLineChart() {
 function formatRageData() {
     var categories = Object.keys(seriesMap).filter(function(key) {
         var data = seriesMap[key];
-        return ['private'].indexOf(data.dataType) !== -1;
+        return data.dataType === vue.rangeDataType;
     });
     var seriesEmptyData = Array(categories.length).fill(0);
     var series = [];
+
+    var startTime = new Date(vue.startTime).getTime();
+    var endTime = new Date(vue.endTime).getTime();
+    var startIndex = -1;
+    var endIndex = -1;
+
     categories.forEach(function (key, index) {
         var data = seriesMap[key];
-        var init = data.yData[0];
-        var total = data.yData[data.yData.length - 1];
+
+        if (startIndex === -1) {
+            startIndex = data.pointData.findIndex(function(point) {
+                return point.x >= startTime;
+            });
+
+            if (startIndex === -1) {
+                startIndex = 0;
+            }
+
+            endIndex = data.pointData.findIndex(function(point) {
+                return point.x >= endTime;
+            });
+
+            if (endIndex === -1) {
+                endIndex = data.pointData.length - 1;
+            }
+
+        }
+
+        var end = endIndex;
+        if (end > data.pointData.length - 1) {
+            end = data.pointData.length - 1;
+        }
+
+        var init = data.yData[startIndex];
+        var total = data.yData[end];
+
         var item = {
             category: key,
             init: init,
@@ -278,17 +366,63 @@ function drawRangeChart() {
 }
 
 function initPage() {
+    if (charts.line) {
+        charts.line.destroy();
+        charts.range.destroy();
+    }
+
+    charts = {};
+    seriesMap = {};
+
     formatData();
     drawLineChart();
     drawRangeChart();
 }
 
+function getEvents(data) {
+    var map = {};
+    eachLogData(data, function(item) {
+        if (!item.data) {
+            return;
+        }
+
+        if (!map[item.data.event]) {
+            map[item.data.event] = 1
+        }
+
+    });
+
+    return Object.keys(map);
+}
+
+function getTimeRage(data) {
+    var key = Object.keys(data)[0];
+    var times = data[key].time;
+    return {
+        start: new Date(parseInt(times[0]) * 1000).toISOString(),
+        end: new Date(parseInt(times[times.length - 1]) * 1000).toISOString()
+    };
+
+}
+
+var dataItems = Object.keys(jsonData);
+
 var vue = new Vue({
     el: '#body',
     data: {
-        onlyPrivate: true,
         displayTime: true,
-        sortBy: 'total'
+        sortBy: 'total',
+        removeCongestedPoint: true,
+        dataKeys: dataItems,
+        curDataKey: dataItems[dataItems.length - 1],
+        events: [],
+        visibleEvents: ['navigate_to', 'click'],
+        startTime: '',
+        endTime: '',
+        displayTypes: ['private'],
+        rangeDataType: 'private',
+        seriesVisibleState: {},
+        showAll: true
     },
     watch: {
         displayTime: function() {
@@ -297,15 +431,60 @@ var vue = new Vue({
         sortBy: function() {
             drawRangeChart();
         },
-        onlyPrivate: function() {
-            charts.line.destroy();
-            charts.range.destroy();
-            charts = {};
-            seriesMap = {};
+        removeCongestedPoint: function() {
+            initPage();
+        },
+        curDataKey: function(value) {
+            jsonData = oriJsonData[value].data;
+
+            vue.events = getEvents(jsonData);
+            var timeRange = getTimeRage(jsonData);
+            vue.startTime = timeRange.start;
+            vue.endTime = timeRange.end;
+
+            initPage();
+        },
+        visibleEvents: function() {
+            initPage();
+        },
+        startTime: function() {
+            setTimeout(drawRangeChart, 20);
+        },
+        endTime: function() {
+            setTimeout(drawRangeChart, 20);
+        },
+        displayTypes: function(types) {
+            initPage();
+
+            if (types.length && types.indexOf(this.rangeDataType) === -1) {
+                this.rangeDataType = types[0];
+            }
+        },
+        rangeDataType: function() {
+            drawRangeChart();
+        },
+        showAll: function(value) {
+            if (value) {
+                this.seriesVisibleState = {};
+            } else {
+                var vm = this;
+                Object.keys(seriesMap).forEach(function(key) {
+                    vm.seriesVisibleState[key] = false;
+                });
+            }
 
             initPage();
         }
     }
 });
+
+jsonData = jsonData[
+    vue.curDataKey
+].data;
+
+vue.events = getEvents(jsonData);
+var timeRange = getTimeRage(jsonData);
+vue.startTime = timeRange.start;
+vue.endTime = timeRange.end;
 
 initPage();
